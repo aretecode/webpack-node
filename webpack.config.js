@@ -1,3 +1,4 @@
+// --- deps ---
 const webpack = require('webpack')
 const devMiddleware = require('webpack-dev-middleware')
 const express = require('express')
@@ -20,6 +21,7 @@ const config = {
   plugins: [new HtmlPlugin()],
 }
 
+// --- server ---
 const compiler = webpack(config)
 const webpackMiddleware = devMiddleware(compiler, {
   // It suppress error shown in console, so it has to be set to false.
@@ -45,7 +47,7 @@ const app = express()
 app.set('port', 8080)
 app.use(historyAPIFallback())
 app.use(webpackMiddleware)
-app.use(webpackHotMiddleware)
+app.use(webpackHotMiddleware(compiler))
 
 app.listen(app.get('port'), error => {
   if (error) throw error
